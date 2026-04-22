@@ -10,7 +10,7 @@
 
 **transformers** — HuggingFace's library. Contains pre-trained models like CLIP, BERT, GPT. Think of it as a store where you can download any major AI model in one line of code.
 
-**peft** — Parameter-Efficient Fine-Tuning library. Contains LoRA and other efficient fine-tuning methods. This is what her paper uses internally.
+**peft** — Parameter-Efficient Fine-Tuning library. Contains LoRA and other efficient fine-tuning methods.
 
 **datasets** — HuggingFace's dataset library. Easy access to thousands of public datasets including CIFAR10.
 
@@ -119,11 +119,11 @@ lora_model.print_trainable_parameters()
 
 `from peft import LoraConfig, get_peft_model` — import LoRA tools. LoraConfig defines the LoRA settings. get_peft_model wraps an existing model with LoRA.
 
-`r=4` — the rank. This is the key LoRA hyperparameter. Rank 4 means the adapter matrices A and B have dimensions (d×4) and (4×d). Same rank used in her paper. Lower rank = fewer parameters but less capacity.
+`r=4` — the rank. This is the key LoRA hyperparameter. Rank 4 means the adapter matrices A and B have dimensions (d×4) and (4×d). Lower rank = fewer parameters but less capacity.
 
 `lora_alpha=8` — scaling factor. The LoRA update is scaled by alpha/r = 8/4 = 2. Controls how much the LoRA update influences the original weights.
 
-`target_modules=["q_proj", "v_proj"]` — which layers to apply LoRA to. "q_proj" is the query projection matrix in self-attention. "v_proj" is the value projection matrix. These are the most important attention components — same choice made in the original LoRA paper.
+`target_modules=["q_proj", "v_proj"]` — which layers to apply LoRA to. "q_proj" is the query projection matrix in self-attention. "v_proj" is the value projection matrix. These are the most important attention components.
 
 `lora_dropout=0.1` — randomly zeros 10% of LoRA activations during training. Prevents overfitting.
 
@@ -232,7 +232,7 @@ for epoch in range(3):
 
 `text_prompts = [f"a photo of a {name}" for name in class_names]` — creates 10 text descriptions, one per class. This is a list comprehension — a compact Python loop. Result: `["a photo of a airplane", "a photo of a automobile", ...]`
 
-`torch.optim.AdamW(lora_model.parameters(), lr=1e-4)` — creates the optimizer. AdamW is the standard optimizer for transformer fine-tuning (used in LoRA paper, her paper, almost everything). `lr=1e-4` is the learning rate — how big each update step is. `lora_model.parameters()` only returns the trainable LoRA parameters since everything else is frozen.
+`torch.optim.AdamW(lora_model.parameters(), lr=1e-4)` — creates the optimizer. AdamW is the standard optimizer for transformer fine-tuning. `lr=1e-4` is the learning rate — how big each update step is. `lora_model.parameters()` only returns the trainable LoRA parameters since everything else is frozen.
 
 `device = "cuda" if torch.cuda.is_available() else "cpu"` — automatically use GPU if available. On Kaggle with GPU enabled this returns "cuda". Training on GPU is ~10-50x faster than CPU.
 
